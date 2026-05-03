@@ -106,12 +106,83 @@
             text-align: left;
         }
 
+        
+
+        .module th:nth-child(2),
+        .module th:nth-child(3),
+        .module th:nth-child(4),
+        .module td:nth-child(2),
+        .module td:nth-child(3),
+        .module td:nth-child(4)  {
+            text-align: center;
+        }
+
         .module th {
             background-color: #FFF1A8;
         }
 
         .module tbody tr:hover {
             background-color: #fff8d6;
+        }
+
+        .low-stock {
+            background-color: #ffe6e6;
+        }
+
+        .nav-item-dropdown {
+            position: relative;
+        }
+
+        .nav-dropdown-toggle {
+            display: block;
+            padding: 14px 16px;
+            border-radius: 10px;
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            transition: background-color 0.25s ease, transform 0.25s ease;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .nav-dropdown-toggle:hover,
+        .nav-dropdown-toggle.active {
+            background-color: #FFD700;
+            transform: translateX(2px);
+        }
+
+        .nav-dropdown-menu {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            margin-top: 5px;
+            padding-left: 10px;
+        }
+
+        .nav-dropdown-menu.show {
+            display: flex;
+        }
+
+        .nav-dropdown-menu a {
+            display: block;
+            padding: 10px 12px;
+            border-radius: 8px;
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.25s ease, transform 0.25s ease;
+            font-size: 14px;
+        }
+
+        .nav-dropdown-menu a:hover,
+        .nav-dropdown-menu a.active {
+            background-color: #FFD700;
+            transform: translateX(2px);
         }
 
         @media (max-width: 960px) {
@@ -144,9 +215,15 @@
             <nav>
                 <a href="adminPanel.html">Dashboard</a>
                 <a href="posPanel.html">POS</a>
-                <a href="productPanel.html">Products</a>
                 <a href="reportPanel.html">Report</a>
-                <a href="inventoryProduct.html" class="active">Inventory</a>
+                <div class="nav-item-dropdown">
+                    <button class="nav-dropdown-toggle active" id="inventory-dropdown-toggle">Inventory</button>
+                    <div class="nav-dropdown-menu show" id="inventory-dropdown-menu">
+                        <a href="#" class="inventory-option active" data-type="products">Products</a>
+                        <a href="#" class="inventory-option" data-type="ingredients">Ingredients</a>
+                    </div>
+                </div>
+                <a href="Logout.html">Logout</a>
             </nav>
         </aside>
         <main class="main-content">
@@ -155,8 +232,9 @@
                 <div class="user-info">Admin • M&A Bakeshop</div>
             </div>
             <section class="module">
-                <h2>Inventory Tracking</h2>
-                <p>Track current ingredient levels and restock needs to ensure the bakery stays fully stocked.</p>
+                <h2>Inventory Management</h2>
+                <p>Manage products and ingredients inventory.</p>
+                <div id="ingredients-table" style="display:none;">
                 <table>
                     <thead>
                         <tr>
@@ -187,9 +265,72 @@
                         </tr>
                     </tbody>
                 </table>
+                </div>
+                <div id="products-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Classic Donut</td>
+                                <td>Pastries</td>
+                                <td>$2.25</td>
+                                <td>24</td>
+                            </tr>
+                            <tr class="low-stock">
+                                <td>Sourdough Loaf</td>
+                                <td>Breads</td>
+                                <td>$6.50</td>
+                                <td>12</td>
+                            </tr>
+                            <tr class="low-stock">
+                                <td>Chocolate Cake Slice</td>
+                                <td>Cakes</td>
+                                <td>$4.95</td>
+                                <td>8</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </section>
         </main>
     </div>
+    <script>
+        // Handle dropdown toggle
+        document.getElementById('inventory-dropdown-toggle').addEventListener('click', function() {
+            var menu = document.getElementById('inventory-dropdown-menu');
+            menu.classList.toggle('show');
+        });
+
+        // Handle inventory option clicks
+        document.querySelectorAll('.inventory-option').forEach(function(option) {
+            option.addEventListener('click', function(e) {
+                e.preventDefault();
+                var type = this.getAttribute('data-type');
+                
+                // Update active state
+                document.querySelectorAll('.inventory-option').forEach(function(opt) {
+                    opt.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // Show/hide tables
+                if (type === 'products') {
+                    document.getElementById('products-table').style.display = 'block';
+                    document.getElementById('ingredients-table').style.display = 'none';
+                } else {
+                    document.getElementById('products-table').style.display = 'none';
+                    document.getElementById('ingredients-table').style.display = 'block';
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

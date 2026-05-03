@@ -64,6 +64,62 @@
             transform: translateX(2px);
         }
 
+        .nav-item-dropdown {
+            position: relative;
+        }
+
+        .nav-dropdown-toggle {
+            display: block;
+            padding: 14px 16px;
+            border-radius: 10px;
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            transition: background-color 0.25s ease, transform 0.25s ease;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .nav-dropdown-toggle:hover,
+        .nav-dropdown-toggle.active {
+            background-color: #FFD700;
+            transform: translateX(2px);
+        }
+
+        .nav-dropdown-menu {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            margin-top: 5px;
+            padding-left: 10px;
+        }
+
+        .nav-dropdown-menu.show {
+            display: flex;
+        }
+
+        .nav-dropdown-menu a {
+            display: block;
+            padding: 10px 12px;
+            border-radius: 8px;
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.25s ease, transform 0.25s ease;
+            font-size: 14px;
+        }
+
+        .nav-dropdown-menu a:hover,
+        .nav-dropdown-menu a.active {
+            background-color: #FFD700;
+            transform: translateX(2px);
+        }
+
         .main-content {
             padding: 30px 40px;
         }
@@ -106,6 +162,15 @@
             text-align: left;
         }
 
+        .module th:nth-child(2),
+        .module th:nth-child(3),
+        .module th:nth-child(4),
+        .module td:nth-child(2),
+        .module td:nth-child(3),
+        .module td:nth-child(4) {
+            text-align: center;
+        }
+
         .module th {
             background-color: #FFF1A8;
         }
@@ -146,7 +211,13 @@
                 <a href="posPanel.html">POS</a>
                 <a href="productPanel.html" class="active">Products</a>
                 <a href="reportPanel.html">Report</a>
-                <a href="inventoryProduct.html">Inventory</a>
+                <div class="nav-item-dropdown">
+                    <button class="nav-dropdown-toggle" id="inventory-dropdown-toggle">Inventory</button>
+                    <div class="nav-dropdown-menu" id="inventory-dropdown-menu">
+                        <a href="inventoryProduct.html?type=products">Products</a>
+                        <a href="inventoryProduct.html?type=ingredients">Ingredients</a>
+                    </div>
+                </div>
             </nav>
         </aside>
         <main class="main-content">
@@ -190,6 +261,12 @@
             </section>
         </main>
     </div>
+    <script>
+        document.getElementById('inventory-dropdown-toggle').addEventListener('click', function() {
+            var menu = document.getElementById('inventory-dropdown-menu');
+            menu.classList.toggle('show');
+        });
+    </script>
 </body>
 
 </html>
