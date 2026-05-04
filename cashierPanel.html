@@ -65,6 +65,9 @@
         }
 
         .main-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
             padding: 30px 40px;
         }
 
@@ -73,6 +76,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 30px;
+            grid-column: 1 / -1;
         }
 
         .top-bar h1 {
@@ -81,66 +85,198 @@
             color: #DAA520;
         }
 
-        .module {
+        .cart-section {
             background-color: #fff;
             border-radius: 20px;
-            padding: 30px;
+            padding: 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            height: fit-content;
+            position: sticky;
+            top: 30px;
         }
 
-        .module h2 {
+        .cart-section h2 {
             margin-top: 0;
+            color: #DAA520;
+            font-size: 20px;
+        }
+
+        .cart-items {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #FFF8E1;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        .cart-item-name {
+            flex: 1;
+        }
+
+        .cart-item-qty {
+            margin: 0 8px;
+            font-weight: bold;
+        }
+
+        .cart-item-price {
+            font-weight: bold;
             color: #DAA520;
         }
 
-        .module table {
+        .remove-btn {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+
+        .remove-btn:hover {
+            background-color: #ff5252;
+        }
+
+        .cart-total {
+            border-top: 2px solid #FFD700;
+            padding-top: 12px;
+            margin-top: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #DAA520;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .checkout-btn {
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+            padding: 12px;
+            background-color: #DAA520;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 12px;
         }
 
-        .module th,
-        .module td {
-            padding: 12px 14px;
-            border-bottom: 1px solid #eee;
-            text-align: left;
+        .checkout-btn:hover {
+            background-color: #c49420;
         }
 
-        .module th {
+        .products-section {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background-color: #fff;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 150px;
             background-color: #FFF1A8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            overflow: hidden;
         }
 
-        .module tbody tr:hover {
-            background-color: #fff8d6;
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
-        .callout {
-            background-color: #FFF8E1;
-            border-left: 5px solid #DAA520;
-            padding: 18px 22px;
-            border-radius: 14px;
-            margin-top: 20px;
-            color: #444;
+        .product-info {
+            padding: 15px;
+        }
+
+        .product-name {
+            font-weight: bold;
+            font-size: 14px;
+            margin: 0 0 5px 0;
+            color: #DAA520;
+        }
+
+        .product-description {
+            font-size: 12px;
+            color: #666;
+            margin: 0 0 10px 0;
+        }
+
+        .product-price {
+            font-size: 16px;
+            font-weight: bold;
+            color: #DAA520;
+            margin: 0 0 10px 0;
+        }
+
+        .add-to-cart-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #FFD700;
+            color: #333;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-to-cart-btn:hover {
+            background-color: #FFC700;
+        }
+
+        .products-section h3 {
+            font-size: 20px;
+            color: #DAA520;
+            font-weight: bold;
+            margin: 20px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #FFD700;
+        }
+
+        .products-section h3:first-child {
+            margin-top: 0;
         }
 
         @media (max-width: 960px) {
-            .page-wrapper {
+            .main-content {
                 grid-template-columns: 1fr;
             }
 
-            .sidebar {
-                flex-direction: row;
-                overflow-x: auto;
-                padding: 20px;
-                gap: 16px;
-            }
-
-            .sidebar nav {
-                flex-direction: row;
-            }
-
-            .sidebar nav a {
-                white-space: nowrap;
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             }
         }
     </style>
@@ -149,7 +285,7 @@
 <body>
     <div class="page-wrapper">
         <aside class="sidebar">
-            <div class="brand"><span></span> M&A Admin</div>
+            <div class="brand"><span></span> M&A Cashier</div>
             <nav>
                 <a href="posPanel.html" class="active">POS</a>
                 <a href="index.html">Logout</a>
@@ -158,44 +294,165 @@
         <main class="main-content">
             <div class="top-bar">
                 <h1>POS Panel</h1>
-                <div class="user-info">Admin • M&A Bakeshop</div>
+                <div class="user-info">Cashier • M&A Bakeshop</div>
             </div>
-            <section class="module">
-                <h2>POS Orders</h2>
-                <p>Process bakery orders in the POS panel. Add items, adjust quantities, and review the sale before
-                    completing checkout.</p>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Item</th>
-                            <th>Qty</th>
-                            <th>Price</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Chocolate Croissant</td>
-                            <td>2</td>
-                            <td>$4.50</td>
-                            <td>$9.00</td>
-                        </tr>
-                        <tr>
-                            <td>Blueberry Muffin</td>
-                            <td>1</td>
-                            <td>$3.75</td>
-                            <td>$3.75</td>
-                        </tr>
-                        <tr>
-                            <td>Whole Wheat Bread</td>
-                            <td>1</td>
-                            <td>$5.00</td>
-                            <td>$5.00</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="callout">Tip: Confirm quantities and totals before completing the sale.</div>
-            </section>
+
+            <div class="products-section">
+                <h3>Bread</h3>
+                <div class="products-grid">
+                    <!-- Product: Whole Wheat Bread -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/monay.jpg" alt="Whole Wheat Bread" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Monay</p>
+                            <p class="product-price">₱5.00</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/starBread.jpeg" alt="Whole Wheat Bread" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Star Bread</p>
+                            <p class="product-price">₱5.00</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/sputnik.jpg" alt="Whole Wheat Bread" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Sputnik</p>
+                            <p class="product-price">₱5.00</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Pastries</h3>
+                <div class="products-grid">
+                    <!-- Product 1 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/croissant.jpg" alt="Chocolate Croissant" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Chocolate Croissant</p>
+                            <p class="product-description">Buttery and flaky</p>
+                            <p class="product-price">₱4.50</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <!-- Product 2 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/muffin.jpg" alt="Blueberry Muffin" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Blueberry Muffin</p>
+                            <p class="product-description">Fresh blueberry</p>
+                            <p class="product-price">₱3.75</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <!-- Product 4 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/donut.jpg" alt="Donut" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Donut</p>
+                            <p class="product-description">Sweet and glazed</p>
+                            <p class="product-price">₱2.50</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <!-- Product 5 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/croissant2.jpg" alt="Plain Croissant" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Plain Croissant</p>
+                            <p class="product-description">Classic favorite</p>
+                            <p class="product-price">₱3.50</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <!-- Product 6 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/bagel.jpg" alt="Bagel" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Bagel</p>
+                            <p class="product-description">With cream cheese</p>
+                            <p class="product-price">₱4.00</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>🍰 Desserts</h3>
+                <div class="products-grid">
+                    <!-- Product 7 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/pie.jpg" alt="Apple Pie" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Apple Pie Slice</p>
+                            <p class="product-description">Fresh baked</p>
+                            <p class="product-price">₱4.75</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <!-- Product 8 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/cake.jpg" alt="Chocolate Cake" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Chocolate Cake</p>
+                            <p class="product-description">Rich and decadent</p>
+                            <p class="product-price">₱5.50</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cart-section">
+                <h2>Cart</h2>
+                <div class="cart-items">
+                    <div class="cart-item">
+                        <span class="cart-item-name">Chocolate Croissant</span>
+                        <span class="cart-item-qty">x2</span>
+                        <span class="cart-item-price">₱9.00</span>
+                        <button class="remove-btn">Remove</button>
+                    </div>
+                    <div class="cart-item">
+                        <span class="cart-item-name">Blueberry Muffin</span>
+                        <span class="cart-item-qty">x1</span>
+                        <span class="cart-item-price">₱3.75</span>
+                        <button class="remove-btn">Remove</button>
+                    </div>
+                </div>
+                <div class="cart-total">
+                    <span>Total:</span>
+                    <span>₱12.75</span>
+                </div>
+                <button class="checkout-btn">Checkout</button>
+            </div>
         </main>
     </div>
 </body>
