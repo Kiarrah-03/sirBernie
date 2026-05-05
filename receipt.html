@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M&A Bakeshop - Receipt</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .receipt-wrapper {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .receipt-header {
+            text-align: center;
+            border-bottom: 3px solid #FFD700;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .receipt-header h1 {
+            margin: 0;
+            color: #DAA520;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .receipt-header p {
+            margin: 5px 0 0 0;
+            color: #666;
+            font-size: 12px;
+        }
+
+        .receipt-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px dotted #ddd;
+        }
+
+        .receipt-info-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .receipt-info-label {
+            font-weight: bold;
+            color: #DAA520;
+            font-size: 11px;
+        }
+
+        .receipt-items {
+            margin: 20px 0;
+        }
+
+        .receipt-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            font-size: 14px;
+            border-bottom: 1px dotted #eee;
+        }
+
+        .receipt-item-name {
+            flex: 1;
+            color: #333;
+        }
+
+        .receipt-item-qty {
+            text-align: center;
+            min-width: 50px;
+            color: #666;
+        }
+
+        .receipt-item-price {
+            text-align: right;
+            min-width: 80px;
+            font-weight: bold;
+            color: #DAA520;
+        }
+
+        .receipt-totals {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 3px solid #FFD700;
+            border-bottom: 3px solid #FFD700;
+            padding-bottom: 15px;
+        }
+
+        .receipt-total-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            font-size: 14px;
+        }
+
+        .receipt-total-row.subtotal,
+        .receipt-total-row.tax {
+            color: #666;
+        }
+
+        .receipt-total-row.total {
+            font-size: 18px;
+            font-weight: bold;
+            color: #DAA520;
+            margin-top: 10px;
+        }
+
+        .receipt-footer {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px dotted #ddd;
+        }
+
+        .receipt-footer p {
+            margin: 5px 0;
+            color: #666;
+            font-size: 12px;
+        }
+
+        .receipt-footer .message {
+            color: #DAA520;
+            font-weight: bold;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        .payment-method {
+            text-align: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dotted #ddd;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-print {
+            background-color: #DAA520;
+            color: white;
+        }
+
+        .btn-print:hover {
+            background-color: #c49420;
+        }
+
+        .btn-back {
+            background-color: #FFD700;
+            color: #333;
+        }
+
+        .btn-back:hover {
+            background-color: #FFC700;
+        }
+
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+            }
+            .receipt-wrapper {
+                box-shadow: none;
+                padding: 20px;
+                margin: 0;
+            }
+            .actions {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .receipt-wrapper {
+                padding: 20px;
+            }
+            .receipt-header h1 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="receipt-wrapper">
+        <div class="receipt-header">
+            <h1>M&A Bakeshop</h1>
+            <p>Sales Receipt</p>
+        </div>
+
+        <div class="receipt-info">
+            <div class="receipt-info-item">
+                <span class="receipt-info-label">Receipt #</span>
+                <span>RCP-2026-001</span>
+            </div>
+            <div class="receipt-info-item">
+                <span class="receipt-info-label">Date</span>
+                <span>May 04, 2026</span>
+            </div>
+            <div class="receipt-info-item">
+                <span class="receipt-info-label">Time</span>
+                <span>02:45 PM</span>
+            </div>
+        </div>
+
+        <div class="receipt-items">
+            <div class="receipt-item">
+                <span class="receipt-item-name">Chocolate Croissant</span>
+                <span class="receipt-item-qty">x2</span>
+                <span class="receipt-item-price">₱9.00</span>
+            </div>
+            <div class="receipt-item">
+                <span class="receipt-item-name">Blueberry Muffin</span>
+                <span class="receipt-item-qty">x1</span>
+                <span class="receipt-item-price">₱3.75</span>
+            </div>
+            <div class="receipt-item">
+                <span class="receipt-item-name">Monay</span>
+                <span class="receipt-item-qty">x1</span>
+                <span class="receipt-item-price">₱5.00</span>
+            </div>
+        </div>
+
+        <div class="receipt-totals">
+            <div class="receipt-total-row subtotal">
+                <span>Subtotal</span>
+                <span>₱17.75</span>
+            </div>
+            <div class="receipt-total-row tax">
+                <span>Tax (12%)</span>
+                <span>₱2.13</span>
+            </div>
+            <div class="receipt-total-row total">
+                <span>TOTAL</span>
+                <span>₱19.88</span>
+            </div>
+        </div>
+
+        <div class="payment-method">
+            <strong>Payment Method:</strong> Cash
+        </div>
+
+        <div class="receipt-footer">
+            <p class="message">Thank you for your purchase!</p>
+            <p>M&A Bakeshop - Quality Bakery</p>
+            <p>Visit us again soon!</p>
+        </div>
+
+        <div class="actions">
+                <button class="btn btn-print" onclick="window.print()">Print Receipt</button>
+                <button class="btn btn-back" onclick="window.location.href='cashierPanel.html'">Back</button>
+        </div>
+    </div>
+</body>
+
+</html>

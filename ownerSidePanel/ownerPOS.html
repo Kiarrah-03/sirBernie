@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M&A Bakeshop - POS Panel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .page-wrapper {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background-color: #FFFACD;
+            border-right: 1px solid rgba(0, 0, 0, 0.08);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .sidebar .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #DAA520;
+        }
+
+        .sidebar .brand span {
+            font-size: 32px;
+        }
+
+        .sidebar nav {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sidebar nav a {
+            display: block;
+            padding: 14px 16px;
+            border-radius: 10px;
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.25s ease, transform 0.25s ease;
+        }
+
+        .sidebar nav a:hover,
+        .sidebar nav a.active {
+            background-color: #FFD700;
+            transform: translateX(2px);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+            padding: 30px 40px;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            grid-column: 1 / -1;
+        }
+
+        .top-bar h1 {
+            margin: 0;
+            font-size: 32px;
+            color: #DAA520;
+        }
+
+        .cart-section {
+            background-color: #fff;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            height: fit-content;
+            position: sticky;
+            top: 30px;
+        }
+
+        .cart-section h2 {
+            margin-top: 0;
+            color: #DAA520;
+            font-size: 20px;
+        }
+
+        .cart-items {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #FFF8E1;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        .cart-item-name {
+            flex: 1;
+        }
+
+        .cart-item-qty {
+            margin: 0 8px;
+            font-weight: bold;
+        }
+
+        .cart-item-price {
+            font-weight: bold;
+            color: #DAA520;
+        }
+
+        .remove-btn {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+
+        .remove-btn:hover {
+            background-color: #ff5252;
+        }
+
+        .cart-total {
+            border-top: 2px solid #FFD700;
+            padding-top: 12px;
+            margin-top: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #DAA520;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #DAA520;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 12px;
+        }
+
+        .checkout-btn:hover {
+            background-color: #c49420;
+        }
+
+        .products-section {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background-color: #fff;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        /* ── Stock Indicator (inline with price) ── */
+        .price-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 0 0 10px 0;
+        }
+
+        .price-row .product-price {
+            margin: 0;
+        }
+
+        .stock-label {
+            font-size: 11px;
+            font-weight: bold;
+            padding: 2px 7px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        .stock-label.stock-plenty {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .stock-label.stock-medium {
+            background-color: #fff3e0;
+            color: #e65100;
+        }
+
+        .stock-label.stock-low {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+
+        .stock-label.stock-out {
+            background-color: #f5f5f5;
+            color: #757575;
+        }
+
+        /* Dim card when out of stock */
+        .product-card.out-of-stock {
+            opacity: 0.55;
+        }
+
+        .product-card.out-of-stock .add-to-cart-btn {
+            background-color: #ccc;
+            color: #888;
+            cursor: not-allowed;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 150px;
+            background-color: #FFF1A8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 15px;
+        }
+
+        .product-name {
+            font-weight: bold;
+            font-size: 14px;
+            margin: 0 0 5px 0;
+            color: #DAA520;
+        }
+
+        .product-description {
+            font-size: 12px;
+            color: #666;
+            margin: 0 0 10px 0;
+        }
+
+        .product-price {
+            font-size: 16px;
+            font-weight: bold;
+            color: #DAA520;
+            margin: 0 0 10px 0;
+        }
+
+        /* ── Bottom action row: [- qty +]  [Add to Cart] ── */
+        .card-action-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .qty-control {
+            display: flex;
+            align-items: center;
+            border: 1.5px solid #FFD700;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .qty-btn {
+            background: #FFF8E1;
+            border: none;
+            padding: 7px 9px;
+            font-size: 15px;
+            font-weight: bold;
+            color: #DAA520;
+            cursor: pointer;
+            line-height: 1;
+            transition: background-color 0.2s;
+        }
+
+        .qty-btn:hover {
+            background: #FFD700;
+            color: #333;
+        }
+
+        .qty-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+        .qty-input {
+            width: 32px;
+            text-align: center;
+            border: none;
+            border-left: 1.5px solid #FFD700;
+            border-right: 1.5px solid #FFD700;
+            font-size: 13px;
+            font-weight: bold;
+            color: #333;
+            padding: 7px 2px;
+            outline: none;
+            background: #fff;
+            -moz-appearance: textfield;
+        }
+
+        .qty-input::-webkit-inner-spin-button,
+        .qty-input::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+        }
+
+        .add-to-cart-btn {
+            flex: 1;
+            padding: 8px 6px;
+            background-color: #FFD700;
+            color: #333;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .add-to-cart-btn:hover {
+            background-color: #FFC700;
+        }
+
+        .products-section h3 {
+            font-size: 20px;
+            color: #DAA520;
+            font-weight: bold;
+            margin: 20px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #FFD700;
+        }
+
+        .products-section h3:first-child {
+            margin-top: 0;
+        }
+
+        @media (max-width: 960px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <aside class="sidebar">
+            <div class="brand"><span></span> M&A Owner</div>
+            <nav>
+                <a href="/ownerSidePanel/ownerDashboard.html">Dashboard</a>
+                <a href="/ownerSidePanel/ownerPOS.html" class="active">POS</a>
+                <a href="/ownerSidePanel/ownerReport.html">Report</a>
+                <a href="/ownerSidePanel/ownerInventory.html">Inventory</a>
+                <a href="/index.html">Logout</a>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <div class="top-bar">
+                <h1>Owner POS Panel</h1>
+                <div class="user-info">Owner M&A Bakeshop</div>
+            </div>
+
+            <div class="products-section">
+                <h3>Breads</h3>
+                <div class="products-grid">
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/monay.jpg" alt="Monay" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Monay</p>
+                            <p class="product-price">₱5.00</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/starBread.jpeg" alt="Star Bread" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Star Bread</p>
+                            <p class="product-price">₱5.00</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/sputnik.jpg" alt="Sputnik" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Sputnik</p>
+                            <p class="product-price">₱5.00</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Pastries & Sweets</h3>
+                <div class="products-grid">
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/chocoGerman.jpg" alt="Choco German" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Choco German</p>
+                            <p class="product-price">₱5.00</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/spanish.jpg" alt="Spanish" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Spanish</p>
+                            <p class="product-price">₱5.00</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/donut.jpg" alt="Donut" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Donut</p>
+                            <p class="product-price">₱5.00</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/cheeseBread.jpg" alt="Cheese Bread" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Cheese Bread</p>
+                            <p class="product-price">₱5</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/baget.jpg" alt="Baguette" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Baguette</p>
+                            <p class="product-price">₱20.00</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Desserts</h3>
+                <div class="products-grid">
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/bananaCake.jpg" alt="Banana Cake" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Banana Cake</p>
+                            <p class="product-price">₱10.00</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/chocoCake.jpg" alt="Chocolate Cake" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Chocolate Cake</p>
+                            <p class="product-price">₱30.00</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/chocoCrinkles.jpg" alt="Chocolate Crinkles" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Chocolate Crinkles</p>
+                            <p class="product-price">₱8.00</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/pineapplePie.jpg" alt="Pineapple Pie" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Pineapple Pie</p>
+                            <p class="product-price">₱8.00</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/monggoHopia.jpg" alt="Monggo Hopia" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Monggo Hopia</p>
+                            <p class="product-price">₱8.00</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cart-section">
+                <h2>Cart</h2>
+                <div class="cart-items"></div>
+                <div class="cart-total">
+                    <span>Total:</span>
+                    <span>₱0.00</span>
+                </div>
+                <button class="checkout-btn" onclick="showReceipt()">Checkout</button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function randomStock(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        const products = {
+            "Monay": { price: 5, stock: 75 },
+            "Star Bread": { price: 5, stock: 75 },
+            "Sputnik": { price: 5, stock: 75 },
+            "Choco German": { price: 5, stock: randomStock(30, 60) },
+            "Spanish": { price: 5, stock: randomStock(30, 60) },
+            "Donut": { price: 5, stock: randomStock(30, 60) },
+            "Cheese Bread": { price: 5, stock: randomStock(30, 60) },
+            "Baguette": { price: 20, stock: randomStock(30, 60) },
+            "Banana Cake": { price: 10, stock: randomStock(40, 80) },
+            "Chocolate Cake": { price: 30, stock: randomStock(40, 80) },
+            "Chocolate Crinkles": { price: 8, stock: randomStock(40, 80) },
+            "Pineapple Pie": { price: 8, stock: randomStock(40, 80) },
+            "Monggo Hopia": { price: 8, stock: randomStock(40, 80) }
+        };
+
+        let cart = {};
+
+        /* ── Build each card: price-row + qty control + add-to-cart ── */
+        document.querySelectorAll(".product-card").forEach(card => {
+            const name = card.querySelector(".product-name").innerText.trim();
+            const priceEl = card.querySelector(".product-price");
+
+            // 1. Wrap price in a flex row with stock label on the right
+            const priceRow = document.createElement("div");
+            priceRow.className = "price-row";
+            priceEl.parentNode.insertBefore(priceRow, priceEl);
+            priceRow.appendChild(priceEl);
+
+            const label = document.createElement("span");
+            label.className = "stock-label";
+            label.dataset.product = name;
+            priceRow.appendChild(label);
+
+            // 2. Replace the plain button with [- qty +] [Add to Cart]
+            const oldBtn = card.querySelector(".add-to-cart-btn");
+
+            const actionRow = document.createElement("div");
+            actionRow.className = "card-action-row";
+
+            // Qty control
+            const qtyControl = document.createElement("div");
+            qtyControl.className = "qty-control";
+
+            const minusBtn = document.createElement("button");
+            minusBtn.className = "qty-btn";
+            minusBtn.textContent = "−";
+            minusBtn.disabled = true;
+
+            const qtyInput = document.createElement("input");
+            qtyInput.type = "number";
+            qtyInput.className = "qty-input";
+            qtyInput.value = 1;
+            qtyInput.min = 1;
+
+            const plusBtn = document.createElement("button");
+            plusBtn.className = "qty-btn";
+            plusBtn.textContent = "+";
+
+            qtyControl.appendChild(minusBtn);
+            qtyControl.appendChild(qtyInput);
+            qtyControl.appendChild(plusBtn);
+
+            // Add to Cart button
+            const addBtn = document.createElement("button");
+            addBtn.className = "add-to-cart-btn";
+            addBtn.textContent = "Add to Cart";
+
+            actionRow.appendChild(qtyControl);
+            actionRow.appendChild(addBtn);
+
+            oldBtn.replaceWith(actionRow);
+
+            // Sync minus button disabled state
+            function syncMinus() {
+                minusBtn.disabled = parseInt(qtyInput.value) <= 1;
+            }
+
+            // + button
+            plusBtn.addEventListener("click", () => {
+                const stock = products[name].stock;
+                const current = parseInt(qtyInput.value) || 1;
+                if (current < stock) {
+                    qtyInput.value = current + 1;
+                    syncMinus();
+                }
+            });
+
+            // − button
+            minusBtn.addEventListener("click", () => {
+                const current = parseInt(qtyInput.value) || 1;
+                if (current > 1) {
+                    qtyInput.value = current - 1;
+                    syncMinus();
+                }
+            });
+
+            // Manual input guard
+            qtyInput.addEventListener("change", () => {
+                const stock = products[name].stock;
+                let val = parseInt(qtyInput.value) || 1;
+                if (val < 1) val = 1;
+                if (val > stock) val = stock;
+                qtyInput.value = val;
+                syncMinus();
+            });
+
+            // Add to Cart
+            addBtn.addEventListener("click", () => {
+                const qty = parseInt(qtyInput.value) || 1;
+                addToCart(name, qty);
+                qtyInput.value = 1;
+                syncMinus();
+            });
+
+            // Render initial label
+            renderStockBadge(name);
+        });
+
+        /* ── Label rendering ── */
+        function renderStockBadge(name) {
+            const stock = products[name].stock;
+            const label = document.querySelector(`.stock-label[data-product="${CSS.escape(name)}"]`);
+            const card = label ? label.closest(".product-card") : null;
+            if (!label || !card) return;
+
+            label.classList.remove("stock-plenty", "stock-medium", "stock-low", "stock-out");
+            card.classList.remove("out-of-stock");
+
+            if (stock <= 0) {
+                label.textContent = "Out of stock";
+                label.classList.add("stock-out");
+                card.classList.add("out-of-stock");
+            } else if (stock <= 9) {
+                label.textContent = `Only ${stock} left!`;
+                label.classList.add("stock-low");
+            } else if (stock <= 20) {
+                label.textContent = `${stock} left`;
+                label.classList.add("stock-medium");
+            } else {
+                label.textContent = `${stock} in stock`;
+                label.classList.add("stock-plenty");
+            }
+        }
+
+        /* ── Cart logic ── */
+        function addToCart(name, qty = 1) {
+            const product = products[name];
+
+            if (product.stock <= 0) {
+                alert(`${name} is out of stock!`);
+                return;
+            }
+
+            // prevent adding more than stock
+            if (qty > product.stock) {
+                alert(`Only ${product.stock} ${name} left in stock!`);
+                return;
+            }
+
+            product.stock -= qty;
+
+            if (!cart[name]) {
+                cart[name] = { qty: 0, price: product.price };
+            }
+
+            cart[name].qty += qty;
+
+            renderStockBadge(name);
+            updateCartUI();
+        }
+
+        function removeItem(name) {
+            if (cart[name]) {
+                products[name].stock += cart[name].qty;
+                delete cart[name];
+                renderStockBadge(name);
+                updateCartUI();
+            }
+        }
+
+        function updateCartUI() {
+            const cartContainer = document.querySelector(".cart-items");
+            const totalEl = document.querySelector(".cart-total span:last-child");
+
+            cartContainer.innerHTML = "";
+            let total = 0;
+
+            Object.keys(cart).forEach(name => {
+                const item = cart[name];
+                const itemTotal = item.qty * item.price;
+                total += itemTotal;
+
+                cartContainer.innerHTML += `
+                    <div class="cart-item">
+                        <span class="cart-item-name">${name}</span>
+                        <span class="cart-item-qty">x${item.qty}</span>
+                        <span class="cart-item-price">₱${itemTotal.toFixed(2)}</span>
+                        <button class="remove-btn" onclick="removeItem('${name}')">Remove</button>
+                    </div>`;
+            });
+
+            totalEl.innerText = "₱" + total.toFixed(2);
+        }
+    </script>
+</body>
+
+</html>

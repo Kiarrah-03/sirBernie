@@ -1,0 +1,390 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M&A Bakeshop - Report Panel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .page-wrapper {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background-color: #FFFACD;
+            border-right: 1px solid rgba(0, 0, 0, 0.08);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .sidebar .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #DAA520;
+        }
+
+        .sidebar .brand span {
+            font-size: 32px;
+        }
+
+        .sidebar nav {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sidebar nav a {
+            display: block;
+            padding: 14px 16px;
+            border-radius: 10px;
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.25s ease, transform 0.25s ease;
+        }
+
+        .sidebar nav a:hover,
+        .sidebar nav a.active {
+            background-color: #FFD700;
+            transform: translateX(2px);
+        }
+
+        .main-content {
+            padding: 30px 40px;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .top-bar h1 {
+            margin: 0;
+            font-size: 32px;
+            color: #DAA520;
+        }
+
+        .module {
+            background-color: #fff;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .module h2 {
+            margin-top: 0;
+            color: #DAA520;
+        }
+
+        .module table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .module th,
+        .module td {
+            padding: 12px 14px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+
+        .module th {
+            background-color: #FFF1A8;
+        }
+
+        .module tbody tr:hover {
+            background-color: #fff8d6;
+        }
+
+        .module tbody tr.expandable {
+            cursor: pointer;
+        }
+
+        .expand-arrow {
+            display: inline-block;
+            transition: transform 0.3s ease;
+            margin-right: 8px;
+            font-size: 12px;
+        }
+
+        .expand-arrow.open {
+            transform: rotate(180deg);
+        }
+
+        .details-row {
+            display: none;
+        }
+
+        .details-row.open {
+            display: table-row;
+        }
+
+        .details-cell {
+            padding: 10px 14px;
+            background-color: #fafafa;
+        }
+
+        .details-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .details-table th,
+        .details-table td {
+            padding: 8px 14px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+
+        .details-table th {
+            background-color: #FFF1A8;
+            font-weight: bold;
+        }
+
+        .details-table tbody tr:hover {
+            background-color: #fff8d6;
+        }
+
+        @media (max-width: 960px) {
+            .page-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                flex-direction: row;
+                overflow-x: auto;
+                padding: 20px;
+                gap: 16px;
+            }
+
+            .sidebar nav {
+                flex-direction: row;
+            }
+
+            .sidebar nav a {
+                white-space: nowrap;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <aside class="sidebar">
+            <div class="brand"><span></span> M&A Admin</div>
+            <nav>
+                <a href="/managerPanel/adminPanel.html">Dashboard</a>
+                <a href="/managerPanel/cashierPanel.html">POS</a>
+                <a href="/managerPanel/reportPanel.html"  class="active">Report</a>
+                <a href="/managerPanel/inventoryProduct.html">Inventory</a>
+                <a href="/index.html">Logout</a>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <div class="top-bar">
+                <h1>Report Panel</h1>
+                <div class="user-info">Admin • M&A Bakeshop</div>
+            </div>
+            <section class="module">
+                <h2>Daily Sales Report</h2>
+                <p>Review today’s revenue, order totals, and which products were purchased most often.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Report</th>
+                            <th>Value</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="expandable" onclick="toggleDetails('daily')">
+                            <td><span class="expand-arrow" id="arrow-daily">▼</span>Daily Revenue</td>
+                            <td>₱2,420</td>
+                            <td>On target</td>
+                        </tr>
+                        <tr class="details-row" id="details-daily">
+                            <td colspan="3" id="three">
+                                <div class="details-cell" id="two">
+                                    <table class="details-table" id="one">
+                                        <thead>
+                                            <tr>
+                                                <th>Metric</th>
+                                                <th>Value</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Orders Processed</td>
+                                                <td>28</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Returned Items</td>
+                                                <td>2</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Average Order Value</td>
+                                                <td>₱86.43</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="expandable" onclick="toggleDetails('weekly')">
+                            <td><span class="expand-arrow" id="arrow-weekly">▼</span>Weekly Revenue</td>
+                            <td>₱16,940</td>
+                            <td>On target</td>
+                        </tr>
+                        <tr class="details-row" id="details-weekly">
+                            <td colspan="3">
+                                <div class="details-cell">
+                                    <table class="details-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Metric</th>
+                                                <th>Value</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Orders Processed</td>
+                                                <td>196</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Returned Items</td>
+                                                <td>14</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Average Order Value</td>
+                                                <td>₱86.43</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Daily Average</td>
+                                                <td>₱2,420</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="expandable" onclick="toggleDetails('yearly')">
+                            <td><span class="expand-arrow" id="arrow-yearly">▼</span>Yearly Revenue</td>
+                            <td>₱880,300</td>
+                            <td>On track</td>
+                        </tr>
+                        <tr class="details-row" id="details-yearly">
+                            <td colspan="3">
+                                <div class="details-cell">
+                                    <table class="details-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Metric</th>
+                                                <th>Value</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Total Orders</td>
+                                                <td>10,192</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Total Returns</td>
+                                                <td>728</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Average Order Value</td>
+                                                <td>₱86.43</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Monthly Average</td>
+                                                <td>₱73,358.33</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Daily Average</td>
+                                                <td>₱2,420</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin-top: 30px;">
+                    <h3 style="margin-bottom: 16px; color: #DAA520;">Products Purchased Today</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Quantity Sold</th>
+                                <th>Total Sales</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Classic Donut</td>
+                                <td>12</td>
+                                <td>₱27.00</td>
+                            </tr>
+                            <tr>
+                                <td>Chocolate Croissant</td>
+                                <td>9</td>
+                                <td>₱40.50</td>
+                            </tr>
+                            <tr>
+                                <td>Blueberry Muffin</td>
+                                <td>8</td>
+                                <td>₱30.00</td>
+                            </tr>
+                            <tr>
+                                <td>Whole Wheat Bread</td>
+                                <td>5</td>
+                                <td>₱25.00</td>
+                            </tr>
+                            <tr>
+                                <td>Chocolate Cake Slice</td>
+                                <td>4</td>
+                                <td>₱19.80</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        function toggleDetails(type) {
+            const detailsRow = document.getElementById(`details-${type}`);
+            const arrow = document.getElementById(`arrow-${type}`);
+            
+            detailsRow.classList.toggle('open');
+            arrow.classList.toggle('open');
+        }
+    </script>
+</body>
+
+</html>

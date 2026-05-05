@@ -285,16 +285,19 @@
 <body>
     <div class="page-wrapper">
         <aside class="sidebar">
-            <div class="brand"><span></span> M&A Cashier</div>
-            <nav>
-                <a href="posPanel.html" class="active">POS</a>
-                <a href="index.html">Logout</a>
+            <div class="brand"><span></span> M&A Admin</div>
+            <nav id="hello">
+                <a href="/managerPanel/adminPanel.html">Dashboard</a>
+                <a href="/managerPanel/cashierPanel.html"  class="active">POS</a>
+                <a href="/managerPanel/reportPanel.html">Report</a>
+                <a href="/managerPanel/inventoryProduct.html">Inventory</a>
+                <a href="/index.html">Logout</a>
             </nav>
         </aside>
         <main class="main-content">
             <div class="top-bar">
                 <h1>POS Panel</h1>
-                <div class="user-info">Cashier • M&A Bakeshop</div>
+                <div class="user-info">Admin M&A Bakeshop</div>
             </div>
 
             <div class="products-section">
@@ -451,10 +454,66 @@
                     <span>Total:</span>
                     <span>₱12.75</span>
                 </div>
-                <button class="checkout-btn">Checkout</button>
+                <button class="checkout-btn" onclick="showReceipt()">Checkout</button>
             </div>
         </main>
     </div>
-</body>
 
-</html>
+    <!-- Receipt Modal -->
+    
+
+    <script>
+        function showReceipt() {
+            const receiptModal = document.getElementById('receiptModal');
+            const receiptItems = document.getElementById('receiptItems');
+            const receiptTotal = document.getElementById('receiptTotal');
+            const receiptDate = document.getElementById('receiptDate');
+            const receiptTime = document.getElementById('receiptTime');
+
+            // Get current date and time
+            const now = new Date();
+            const date = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+            receiptDate.textContent = date;
+            receiptTime.textContent = time;
+
+            // Get cart items from DOM
+            const cartItemsDOM = document.querySelectorAll('.cart-item');
+            let itemsHTML = '';
+            let total = 0;
+
+            cartItemsDOM.forEach(item => {
+                const name = item.querySelector('.cart-item-name').textContent.trim();
+                const qty = item.querySelector('.cart-item-qty').textContent.trim().replace('x', '');
+                const price = item.querySelector('.cart-item-price').textContent.trim().replace('₱', '');
+                
+                itemsHTML += `
+                    <div class="receipt-item">
+                        <span class="receipt-item-name">${name}</span>
+                        <span class="receipt-item-qty">x${qty}</span>
+                        <span class="receipt-item-price">₱${price}</span>
+                    </div>
+                `;
+                total += parseFloat(price);
+            });
+
+            receiptItems.innerHTML = itemsHTML;
+            receiptTotal.textContent = '₱' + total.toFixed(2);
+
+            // Show modal
+            receiptModal.classList.add('show');
+        }
+
+        function closeReceipt() {
+            const receiptModal = document.getElementById('receiptModal');
+            receiptModal.classList.remove('show');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const receiptModal = document.getElementById('receiptModal');
+            if (event.target == receiptModal) {
+                receiptModal.classList.remove('show');
+            }
+        }
+    </script>

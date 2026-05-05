@@ -66,7 +66,7 @@
 
         .main-content {
             display: grid;
-            grid-template-columns: 350px 1fr;
+            grid-template-columns: 1fr 350px;
             gap: 30px;
             padding: 30px 40px;
         }
@@ -257,11 +257,17 @@
             background-color: #FFC700;
         }
 
-        .empty-cart {
-            text-align: center;
-            color: #999;
-            padding: 20px 10px;
-            font-size: 14px;
+        .products-section h3 {
+            font-size: 20px;
+            color: #DAA520;
+            font-weight: bold;
+            margin: 20px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #FFD700;
+        }
+
+        .products-section h3:first-child {
+            margin-top: 0;
         }
 
         @media (max-width: 960px) {
@@ -279,7 +285,7 @@
 <body>
     <div class="page-wrapper">
         <aside class="sidebar">
-            <div class="brand"><span>🍞</span> M&A Admin</div>
+            <div class="brand"><span></span> M&A Cashier</div>
             <nav>
                 <a href="posPanel.html" class="active">POS</a>
                 <a href="index.html">Logout</a>
@@ -291,105 +297,164 @@
                 <div class="user-info">Cashier • M&A Bakeshop</div>
             </div>
 
+            <div class="products-section">
+                <h3>Bread</h3>
+                <div class="products-grid">
+                    <!-- Product: Whole Wheat Bread -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/monay.jpg" alt="Whole Wheat Bread" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Monay</p>
+                            <p class="product-price">₱5.00</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/starBread.jpeg" alt="Whole Wheat Bread" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Star Bread</p>
+                            <p class="product-price">₱5.00</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/sputnik.jpg" alt="Whole Wheat Bread" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Sputnik</p>
+                            <p class="product-price">₱5.00</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Pastries</h3>
+                <div class="products-grid">
+                    <!-- Product 1 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/croissant.jpg" alt="Chocolate Croissant" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Chocolate Croissant</p>
+                            <p class="product-description">Buttery and flaky</p>
+                            <p class="product-price">₱4.50</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <!-- Product 2 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/muffin.jpg" alt="Blueberry Muffin" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Blueberry Muffin</p>
+                            <p class="product-description">Fresh blueberry</p>
+                            <p class="product-price">₱3.75</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <!-- Product 4 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/donut.jpg" alt="Donut" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Donut</p>
+                            <p class="product-description">Sweet and glazed</p>
+                            <p class="product-price">₱2.50</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <!-- Product 5 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/croissant2.jpg" alt="Plain Croissant" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Plain Croissant</p>
+                            <p class="product-description">Classic favorite</p>
+                            <p class="product-price">₱3.50</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <!-- Product 6 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/bagel.jpg" alt="Bagel" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Bagel</p>
+                            <p class="product-description">With cream cheese</p>
+                            <p class="product-price">₱4.00</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>🍰 Desserts</h3>
+                <div class="products-grid">
+                    <!-- Product 7 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/pie.jpg" alt="Apple Pie" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Apple Pie Slice</p>
+                            <p class="product-description">Fresh baked</p>
+                            <p class="product-price">₱4.75</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <!-- Product 8 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="/images/cake.jpg" alt="Chocolate Cake" />
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">Chocolate Cake</p>
+                            <p class="product-description">Rich and decadent</p>
+                            <p class="product-price">₱5.50</p>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="cart-section">
                 <h2>Cart</h2>
-                <div class="cart-items" id="cartItems">
-                    <div class="empty-cart">No items in cart</div>
+                <div class="cart-items">
+                    <div class="cart-item">
+                        <span class="cart-item-name">Chocolate Croissant</span>
+                        <span class="cart-item-qty">x2</span>
+                        <span class="cart-item-price">₱9.00</span>
+                        <button class="remove-btn">Remove</button>
+                    </div>
+                    <div class="cart-item">
+                        <span class="cart-item-name">Blueberry Muffin</span>
+                        <span class="cart-item-qty">x1</span>
+                        <span class="cart-item-price">₱3.75</span>
+                        <button class="remove-btn">Remove</button>
+                    </div>
                 </div>
                 <div class="cart-total">
                     <span>Total:</span>
-                    <span id="cartTotal">₱0.00</span>
+                    <span>₱21.75</span>
                 </div>
                 <button class="checkout-btn">Checkout</button>
             </div>
-
-            <div class="products-section">
-                <div class="products-grid" id="productsGrid">
-                    <!-- Products will be generated by JavaScript -->
-                </div>
-            </div>
         </main>
     </div>
-
-    <script>
-        // Product database
-        const products = [
-            { id: 1, name: 'Chocolate Croissant', description: 'Buttery and flaky', price: 4.50, image: '/images/croissant.jpg' },
-            { id: 2, name: 'Blueberry Muffin', description: 'Fresh blueberry', price: 3.75, image: '/images/muffin.jpg' },
-            { id: 3, name: 'Whole Wheat Bread', description: 'Healthy choice', price: 5.00, image: '/images/bread.jpg' },
-            { id: 4, name: 'Donut', description: 'Sweet and glazed', price: 2.50, image: '/images/donut.jpg' },
-            { id: 5, name: 'Croissant', description: 'Plain croissant', price: 3.50, image: '/images/croissant2.jpg' },
-            { id: 6, name: 'Bagel', description: 'With cream cheese', price: 4.00, image: '/images/bagel.jpg' },
-            { id: 7, name: 'Pie', description: 'Apple pie slice', price: 4.75, image: '/images/pie.jpg' },
-            { id: 8, name: 'Cake Slice', description: 'Chocolate cake', price: 5.50, image: '/images/cake.jpg' }
-        ];
-
-        let cart = [];
-
-        // Render products
-        function renderProducts() {
-            const grid = document.getElementById('productsGrid');
-            grid.innerHTML = products.map(product => `
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="${product.image}" alt="${product.name}" />
-                    </div>
-                    <div class="product-info">
-                        <p class="product-name">${product.name}</p>
-                        <p class="product-description">${product.description}</p>
-                        <p class="product-price">₱${product.price.toFixed(2)}</p>
-                        <button class="add-to-cart-btn" onclick="addToCart(${product.id})">Add to Cart</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Add to cart
-        function addToCart(productId) {
-            const product = products.find(p => p.id === productId);
-            const existingItem = cart.find(item => item.id === productId);
-
-            if (existingItem) {
-                existingItem.quantity++;
-            } else {
-                cart.push({ ...product, quantity: 1 });
-            }
-
-            updateCart();
-        }
-
-        function removeFromCart(productId) {
-            cart = cart.filter(item => item.id !== productId);
-            updateCart();
-        }
-
-        // Update cart display
-        function updateCart() {
-            const cartItems = document.getElementById('cartItems');
-            const cartTotal = document.getElementById('cartTotal');
-
-            if (cart.length === 0) {
-                cartItems.innerHTML = '<div class="empty-cart">No items in cart</div>';
-                cartTotal.textContent = '$0.00';
-                return;
-            }
-
-            cartItems.innerHTML = cart.map(item => `
-                <div class="cart-item">
-                    <span class="cart-item-name">${item.name}</span>
-                    <span class="cart-item-qty">x${item.quantity}</span>
-                    <span class="cart-item-price">₱${(item.price * item.quantity).toFixed(2)}</span>
-                    <button class="remove-btn" onclick="removeFromCart(${item.id})">Remove</button>
-                </div>
-            `).join('');
-
-            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            cartTotal.textContent = '₱' + total.toFixed(2);
-        }
-
-        // Initialize
-        renderProducts();
-    </script>
 </body>
 
 </html>

@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M&A Bakeshop - Employee Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .page-wrapper {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background-color: #FFFACD;
+            border-right: 1px solid rgba(0, 0, 0, 0.08);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .sidebar .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #DAA520;
+        }
+
+        .sidebar .brand span {
+            font-size: 32px;
+        }
+
+        .sidebar nav {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sidebar nav a {
+            display: block;
+            padding: 14px 16px;
+            border-radius: 10px;
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.25s ease, transform 0.25s ease;
+        }
+
+        .sidebar nav a:hover,
+        .sidebar nav a.active {
+            background-color: #FFD700;
+            transform: translateX(2px);
+        }
+
+        .main-content {
+            padding: 30px 40px;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .top-bar h1 {
+            margin: 0;
+            font-size: 32px;
+            color: #DAA520;
+        }
+
+        .top-bar .user-info {
+            background-color: white;
+            padding: 12px 18px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+
+        .section-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            color: #DAA520;
+        }
+
+        .card p {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .card.small {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card.small h3 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .card.small span {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .module {
+            background-color: #fff;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+        .module h2 {
+            margin-top: 0;
+            color: #DAA520;
+        }
+
+        .module table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .module th,
+        .module td {
+            padding: 12px 14px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+
+        .module th {
+            background-color: #FFF1A8;
+        }
+
+        .module tbody tr:hover {
+            background-color: #fff8d6;
+        }
+
+        .employee-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #DAA520;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .employee-info h3 {
+            margin: 0;
+            color: #DAA520;
+            font-size: 18px;
+        }
+
+        .employee-info p {
+            margin: 5px 0;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .employee-status {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-active {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-off {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-break {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            background-color: #FFD700;
+            color: #333;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background-color 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background-color: #FFC700;
+        }
+
+        .grid-2col {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .quick-action-btn {
+            flex: 1;
+            min-width: 150px;
+            padding: 12px 16px;
+            background-color: #FFD700;
+            color: #333;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .quick-action-btn:hover {
+            background-color: #FFC700;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 960px) {
+            .page-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                flex-direction: row;
+                overflow-x: auto;
+                padding: 20px;
+                gap: 16px;
+            }
+
+            .sidebar nav {
+                flex-direction: row;
+            }
+
+            .sidebar nav a {
+                white-space: nowrap;
+            }
+
+            .grid-2col {
+                grid-template-columns: 1fr;
+            }
+
+            .employee-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .employee-status {
+                width: 100%;
+                margin-top: 15px;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <aside class="sidebar">
+            <div class="brand"><span></span> M&A Owner</div>
+            <nav>
+                <a href="/ownerSidePanel/ownerDashboard.html">Dashboard</a>
+                <a href="/ownerSidePanel/ownerPOS.html">POS</a>
+                <a href="/ownerSidePanel/ownerReport.html">Report</a>
+                <a href="/ownerSidePanel/ownerInventory.html">Inventory</a>
+                <a href="/ownerSidePanel/adtiveEmployee.html" class="active">Employees</a>
+                <a href="/index.html">Logout</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="top-bar">
+                <h1>Employee Management</h1>
+                <div class="user-info">Owner M&A Bakeshop</div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="section-grid">
+                <div class="card small">
+                    <div>
+                        <h3>Total Staff</h3>
+                        <span>12</span>
+                    </div>
+                </div>
+                <div class="card small">
+                    <div>
+                        <h3>On Duty</h3>
+                        <span>8</span>
+                    </div>
+                </div>
+                <div class="card small">
+                    <div>
+                        <h3>On Break</h3>
+                        <span>2</span>
+                    </div>
+                </div>
+                <div class="card small">
+                    <div>
+                        <h3>Off Duty</h3>
+                        <span>2</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card">
+                <h2>Quick Actions</h2>
+                <div class="quick-actions">
+                    <button class="quick-action-btn">➕ Add Employee</button>
+                    <button class="quick-action-btn">📋 View Schedule</button>
+                    <button class="quick-action-btn">⏱️ Shift Log</button>
+                </div>
+            </div>
+
+            <!-- Active Employees -->
+            <div class="grid-2col">
+                <div class="module">
+                    <h2>👥 Active Employees</h2>
+                    
+                    <div class="employee-card">
+                        <div class="employee-info">
+                            <h3>Maria Santos</h3>
+                            <p>Baker • Since Jan 2023</p>
+                        </div>
+                        <div class="employee-status">
+                            <span class="status-badge status-active">On Duty</span>
+                            <button class="action-btn">Edit</button>
+                        </div>
+                    </div>
+
+                    <div class="employee-card">
+                        <div class="employee-info">
+                            <h3>Juan Dela Cruz</h3>
+                            <p>Cashier • Since Feb 2023</p>
+                        </div>
+                        <div class="employee-status">
+                            <span class="status-badge status-active">On Duty</span>
+                            <button class="action-btn">Edit</button>
+                        </div>
+                    </div>
+
+                    <div class="employee-card">
+                        <div class="employee-info">
+                            <h3>Rosa Garcia</h3>
+                            <p>Baker • Since Dec 2022</p>
+                        </div>
+                        <div class="employee-status">
+                            <span class="status-badge status-break">On Break</span>
+                            <button class="action-btn">Edit</button>
+                        </div>
+                    </div>
+
+                    <div class="employee-card">
+                        <div class="employee-info">
+                            <h3>Carlos Lopez</h3>
+                            <p>Delivery • Since Mar 2023</p>
+                        </div>
+                        <div class="employee-status">
+                            <span class="status-badge status-active">On Duty</span>
+                            <button class="action-btn">Edit</button>
+                        </div>
+                    </div>
+
+                    <div class="employee-card">
+                        <div class="employee-info">
+                            <h3>Ana Rivera</h3>
+                            <p>Pastry Chef • Since Jan 2023</p>
+                        </div>
+                        <div class="employee-status">
+                            <span class="status-badge status-off">Off Duty</span>
+                            <button class="action-btn">Edit</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Employee Schedule -->
+                <div class="module">
+                    <h2>📅 Today's Schedule</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Start Time</th>
+                                <th>End Time</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Maria Santos</td>
+                                <td>6:00 AM</td>
+                                <td>2:00 PM</td>
+                                <td><span class="status-badge status-active">Working</span></td>
+                            </tr>
+                            <tr>
+                                <td>Juan Dela Cruz</td>
+                                <td>8:00 AM</td>
+                                <td>5:00 PM</td>
+                                <td><span class="status-badge status-active">Working</span></td>
+                            </tr>
+                            <tr>
+                                <td>Rosa Garcia</td>
+                                <td>6:00 AM</td>
+                                <td>2:00 PM</td>
+                                <td><span class="status-badge status-break">Break</span></td>
+                            </tr>
+                            <tr>
+                                <td>Carlos Lopez</td>
+                                <td>9:00 AM</td>
+                                <td>6:00 PM</td>
+                                <td><span class="status-badge status-active">Working</span></td>
+                            </tr>
+                            <tr>
+                                <td>Ana Rivera</td>
+                                <td>Off</td>
+                                <td>Off</td>
+                                <td><span class="status-badge status-off">Off</span></td>
+                            </tr>
+                            <tr>
+                                <td>Miguel Cruz</td>
+                                <td>8:00 AM</td>
+                                <td>5:00 PM</td>
+                                <td><span class="status-badge status-active">Working</span></td>
+                            </tr>
+                            <tr>
+                                <td>Sofia Mendez</td>
+                                <td>10:00 AM</td>
+                                <td>7:00 PM</td>
+                                <td><span class="status-badge status-active">Working</span></td>
+                            </tr>
+                            <tr>
+                                <td>Pedro Santos</td>
+                                <td>8:00 AM</td>
+                                <td>5:00 PM</td>
+                                <td><span class="status-badge status-active">Working</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Performance Summary -->
+            <div class="module">
+                <h2>⭐ Performance Summary</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Employee</th>
+                            <th>Position</th>
+                            <th>Attendance</th>
+                            <th>Performance</th>
+                            <th>Rating</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Maria Santos</td>
+                            <td>Baker</td>
+                            <td>98%</td>
+                            <td>Excellent</td>
+                            <td>⭐⭐⭐⭐⭐</td>
+                        </tr>
+                        <tr>
+                            <td>Juan Dela Cruz</td>
+                            <td>Cashier</td>
+                            <td>96%</td>
+                            <td>Very Good</td>
+                            <td>⭐⭐⭐⭐</td>
+                        </tr>
+                        <tr>
+                            <td>Rosa Garcia</td>
+                            <td>Baker</td>
+                            <td>95%</td>
+                            <td>Very Good</td>
+                            <td>⭐⭐⭐⭐</td>
+                        </tr>
+                        <tr>
+                            <td>Carlos Lopez</td>
+                            <td>Delivery</td>
+                            <td>97%</td>
+                            <td>Excellent</td>
+                            <td>⭐⭐⭐⭐⭐</td>
+                        </tr>
+                        <tr>
+                            <td>Ana Rivera</td>
+                            <td>Pastry Chef</td>
+                            <td>99%</td>
+                            <td>Excellent</td>
+                            <td>⭐⭐⭐⭐⭐</td>
+                        </tr>
+                        <tr>
+                            <td>Miguel Cruz</td>
+                            <td>Helper</td>
+                            <td>92%</td>
+                            <td>Good</td>
+                            <td>⭐⭐⭐⭐</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

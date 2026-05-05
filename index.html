@@ -214,22 +214,20 @@
                 <button type="submit">Login</button>
             </form>
 
-            <p class="brand">M&A Bakeshop &copy; 2025</p>
+            <p class="brand">M&A Bakeshop &copy; 2019</p>
         </div>
-
     </div>
 
     <script>
         // User credentials and roles
         const users = {
-            'owner': { password: 'owner123', role: 'owner', panel: 'adminPanel.html' },
-            'admin': { password: 'admin123', role: 'admin', panel: 'managerPanel.html' },
-            'cashier': { password: 'cashier123', role: 'cashier', panel: 'cashierPanel.html' }
+            'owner': { password: 'owner123', role: 'owner', panel: '/ownerSidePanel/ownerDashboard.html' },
+            'admin': { password: 'admin123', role: 'admin', panel: '/managerPanel/adminPanel.html' },
+            'cashier': { password: 'cashier123', role: 'cashier', panel: 'posPanel.html' }
         };
 
         const loginForm = document.getElementById('loginForm');
         const errorMessage = document.getElementById('errorMessage');
-
         loginForm.addEventListener('submit', function(e) {
             e.preventDefault();
 

@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M&A Bakeshop - Inventory Panel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .page-wrapper {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background-color: #FFFACD;
+            border-right: 1px solid rgba(0, 0, 0, 0.08);
+            padding: 30px 20px;
+            display: flex;  
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .sidebar .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #DAA520;
+        }
+
+        .sidebar .brand span {
+            font-size: 32px;
+        }
+
+        .sidebar nav {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sidebar nav a {
+            display: block;
+            padding: 14px 16px;
+            border-radius: 10px;
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.25s ease, transform 0.25s ease;
+        }
+
+        .sidebar nav a:hover,
+        .sidebar nav a.active {
+            background-color: #FFD700;
+            transform: translateX(2px);
+        }
+
+        .main-content {
+            padding: 30px 40px;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .top-bar h1 {
+            margin: 0;
+            font-size: 32px;
+            color: #DAA520;
+        }
+
+        .module {
+            background-color: #fff;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .module h2 {
+            margin-top: 0;
+            color: #DAA520;
+        }
+
+        .module table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .module th,
+        .module td {
+            padding: 12px 14px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+
+        
+
+        .module th:nth-child(2),
+        .module th:nth-child(3),
+        .module th:nth-child(4),
+        .module td:nth-child(2),
+        .module td:nth-child(3),
+        .module td:nth-child(4)  {
+            text-align: center;
+        }
+
+        .module th {
+            background-color: #FFF1A8;
+        }
+
+        .module tbody tr:hover {
+            background-color: #fff8d6;
+        }
+
+        .low-stock {
+            background-color: #ffe6e6;
+        }
+
+        .nav-item-dropdown {
+            position: relative;
+        }
+
+        .nav-dropdown-toggle {
+            display: block;
+            padding: 14px 16px;
+            border-radius: 10px;
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            transition: background-color 0.25s ease, transform 0.25s ease;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .nav-dropdown-toggle:hover,
+        .nav-dropdown-toggle.active {
+            background-color: #FFD700;
+            transform: translateX(2px);
+        }
+
+        .nav-dropdown-menu {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            margin-top: 5px;
+            padding-left: 10px;
+        }
+
+        .nav-dropdown-menu.show {
+            display: flex;
+        }
+
+        .nav-dropdown-menu a {
+            display: block;
+            padding: 10px 12px;
+            border-radius: 8px;
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.25s ease, transform 0.25s ease;
+            font-size: 14px;
+        }
+
+        .nav-dropdown-menu a:hover,
+        .nav-dropdown-menu a.active {
+            background-color: #FFD700;
+            transform: translateX(2px);
+        }
+
+        @media (max-width: 960px) {
+            .page-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                flex-direction: row;
+                overflow-x: auto;
+                padding: 20px;
+                gap: 16px;
+            }
+
+            .sidebar nav {
+                flex-direction: row;
+            }
+
+            .sidebar nav a {
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <aside class="sidebar">
+            <div class="brand" style="color: #000000;"><span></span> M&A Owner</div>
+            <nav>
+                <a href="/ownerSidePanel/ownerDashboard.html">Dashboard</a>
+                <a href="/ownerSidePanel/ownerPOS.html">POS</a>
+                <a href="/ownerSidePanel/ownerReport.html">Report</a>
+                <div class="nav-item-dropdown">
+                    <button class="nav-dropdown-toggle active" id="inventory-dropdown-toggle">Inventory</button>
+                    <div class="nav-dropdown-menu show" id="inventory-dropdown-menu">
+                        <a href="#" class="inventory-option active" data-type="products">Products</a>
+                        <a href="#" class="inventory-option" data-type="ingredients">Ingredients</a>
+                    </div>
+                </div>
+                <a href="/ownerSidePanel/adtiveEmployee.html">Employees</a>
+                <a href="/index.html">Logout</a>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <div class="top-bar">
+                <h1>Inventory Panel</h1>
+                <div class="user-info">Owner M&A Bakeshop</div>
+            </div>
+            <section class="module">
+                <h2>Inventory Management</h2>
+                <p>Manage products and ingredients inventory.</p>
+                <div id="ingredients-table" style="display:none;">
+                <table>
+                    <thead>
+                        <tr syle="bcolor:">
+                            <th>Ingredient</th>
+                            <th>Available</th>
+                            <th>Needed</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Flour</td>
+                            <td>24 kg</td>
+                            <td>30 kg</td>
+                            <td>Low</td>
+                        </tr>
+                        <tr>
+                            <td>Sugar</td>
+                            <td>15 kg</td>
+                            <td>25 kg</td>
+                            <td>Low</td>
+                        </tr>
+                        <tr>
+                            <td>Butter</td>
+                            <td>12 kg</td>
+                            <td>18 kg</td>
+                            <td>Okay</td>
+                        </tr>
+                        <tr>
+                            <td>Eggs</td>
+                            <td>48 pcs</td>
+                            <td>60 pcs</td>
+                            <td>Okay</td>
+                        </tr>
+                        <tr>
+                            <td>Milk</td>
+                            <td>8 L</td>
+                            <td>12 L</td>
+                            <td>Low</td>
+                        </tr>
+                        <tr>
+                            <td>Salt</td>
+                            <td>3 kg</td>
+                            <td>5 kg</td>
+                            <td>Okay</td>
+                        </tr>
+                        <tr>
+                            <td>Yeast</td>
+                            <td>2 kg</td>
+                            <td>3 kg</td>
+                            <td>Okay</td>
+                        </tr>
+                        <tr>
+                            <td>Chocolate</td>
+                            <td>10 kg</td>
+                            <td>15 kg</td>
+                            <td>Low</td>
+                        </tr>
+                        <tr>
+                            <td>Blueberries</td>
+                            <td>5 kg</td>
+                            <td>8 kg</td>
+                            <td>Okay</td>
+                        </tr>
+                        <tr>
+                            <td>Apples</td>
+                            <td>12 kg</td>
+                            <td>15 kg</td>
+                            <td>Okay</td>
+                        </tr>
+                        <tr>
+                            <td>Cream Cheese</td>
+                            <td>4 kg</td>
+                            <td>6 kg</td>
+                            <td>Low</td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div id="products-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Monay</td>
+                                <td>Bread</td>
+                                <td>₱5.00</td>
+                                <td>18</td>
+                            </tr>
+                            <tr>
+                                <td>Star Bread</td>
+                                <td>Bread</td>
+                                <td>₱5.00</td>
+                                <td>15</td>
+                            </tr>
+                            <tr>
+                                <td>Prances</td>
+                                <td>Bread</td>
+                                <td>₱4.50</td>
+                                <td>12</td>
+                            </tr>
+                            <tr>
+                                <td>Cheese Bread</td>
+                                <td>Bread</td>
+                                <td>₱5.00</td>
+                                <td>14</td>
+                            </tr>
+                            <tr>
+                                <td>Double Body</td>
+                                <td>Bread</td>
+                                <td>₱6.00</td>
+                                <td>10</td>
+                            </tr>
+                            <tr>
+                                <td>Banana Loaf</td>
+                                <td>Bread</td>
+                                <td>₱5.50</td>
+                                <td>9</td>
+                            </tr>
+                            <tr>
+                                <td>Choco German</td>
+                                <td>Pastries</td>
+                                <td>₱5.00</td>
+                                <td>16</td>
+                            </tr>
+                            <tr>
+                                <td>Cupcake</td>
+                                <td>Pastries</td>
+                                <td>₱4.00</td>
+                                <td>20</td>
+                            </tr>
+                            <tr>
+                                <td>Crinkles</td>
+                                <td>Pastries</td>
+                                <td>₱3.50</td>
+                                <td>25</td>
+                            </tr>
+                            <tr>
+                                <td>Japanese Pie</td>
+                                <td>Pastries</td>
+                                <td>₱4.50</td>
+                                <td>18</td>
+                            </tr>
+                            <tr>
+                                <td>Bengka</td>
+                                <td>Pastries</td>
+                                <td>₱5.00</td>
+                                <td>17</td>
+                            </tr>
+                            <tr>
+                                <td>Hopia</td>
+                                <td>Pastries</td>
+                                <td>₱4.00</td>
+                                <td>22</td>
+                            </tr>
+                            <tr class="low-stock">
+                                <td>Banana Cake</td>
+                                <td>Desserts</td>
+                                <td>₱6.50</td>
+                                <td>8</td>
+                            </tr>
+                            <tr>
+                                <td>Torta</td>
+                                <td>Desserts</td>
+                                <td>₱8.00</td>
+                                <td>5</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script>
+        // Handle dropdown toggle
+        document.getElementById('inventory-dropdown-toggle').addEventListener('click', function() {
+            var menu = document.getElementById('inventory-dropdown-menu');
+            menu.classList.toggle('show');
+        });
+
+        // Handle inventory option clicks
+        document.querySelectorAll('.inventory-option').forEach(function(option) {
+            option.addEventListener('click', function(e) {
+                e.preventDefault();
+                var type = this.getAttribute('data-type');
+                
+                // Update active state
+                document.querySelectorAll('.inventory-option').forEach(function(opt) {
+                    opt.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // Show/hide tables
+                if (type === 'products') {
+                    document.getElementById('products-table').style.display = 'block';
+                    document.getElementById('ingredients-table').style.display = 'none';
+                } else {
+                    document.getElementById('products-table').style.display = 'none';
+                    document.getElementById('ingredients-table').style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
